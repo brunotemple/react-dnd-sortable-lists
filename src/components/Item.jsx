@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 
-import { ItemType, ColumnType } from "../data/Types";
+import { ItemType, ColumnType } from "../types/Types.js";
 
 const Item = ({ item, index, moveItem, columnType }) => {
   const ref = useRef(null);
@@ -55,7 +55,20 @@ const Item = ({ item, index, moveItem, columnType }) => {
 
   return (
     <>
-      {columnType === ColumnType.chart ? (
+      {columnType === ColumnType.graph ? (
+        <div
+          ref={ref}
+          style={{
+            border: "0.5px solid magenta",
+            marginTop: 4,
+            marginBottom: 8,
+            height: 36,
+            opacity: isDragging ? 0 : 1,
+          }}
+        >
+          <p>{item.graph}</p>
+        </div>
+      ) : columnType === ColumnType.text ? (
         <div
           ref={ref}
           style={{
@@ -66,13 +79,13 @@ const Item = ({ item, index, moveItem, columnType }) => {
             opacity: isDragging ? 0 : 1,
           }}
         >
-          <p>{item.graph}</p>
+          <p>{item.text}</p>
         </div>
       ) : (
         <div
           ref={ref}
           style={{
-            border: "0.5px solid pink",
+            border: "0.5px solid purple",
             margin: `8px 4px`,
             height: 36,
             opacity: isDragging ? 0 : 1,

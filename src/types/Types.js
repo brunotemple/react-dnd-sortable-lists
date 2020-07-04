@@ -1,6 +1,7 @@
 export const ItemType = "cardInfo";
 
 export const ColumnType = {
-  chart: "chart",
+  graph: "graph",
   number: "number",
+  text: "text",
 };

@@ -1,8 +1,9 @@
 import React from "react";
-import { ColumnType } from "../data/Types";
+
+import { ColumnType } from "../types/Types";
 
 const Column = ({ children, columnType }) => {
-  return columnType === ColumnType.chart ? (
+  return columnType !== ColumnType.number ? (
     <div
       style={{
         minHeight: 48,
