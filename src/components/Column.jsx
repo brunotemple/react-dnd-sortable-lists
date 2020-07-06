@@ -3,7 +3,7 @@ import { useDrop } from "react-dnd";
 
 import { ItemType, ColumnType } from "../types/Types.js";
 
-const DropWrapper = ({ children, onHover, columnType }) => {
+const Column = ({ children, onHover, columnType }) => {
   const [{ isOver }, drop] = useDrop({
     accept: ItemType,
     hover: (item) => {
@@ -24,7 +24,7 @@ const DropWrapper = ({ children, onHover, columnType }) => {
             margin: 8,
             padding: 8,
             border: "0.5px solid black",
-            backGround: isOver ? "lightGrey" : "white",
+            background: isOver ? "lightGrey" : "white",
           }}
         >
           {children}
@@ -39,7 +39,7 @@ const DropWrapper = ({ children, onHover, columnType }) => {
             margin: 8,
             padding: 8,
             border: "0.5px solid black",
-            backGround: isOver ? "lightGrey" : "white",
+            background: isOver ? "lightGrey" : "white",
           }}
         >
           {children}
@@ -49,4 +49,4 @@ const DropWrapper = ({ children, onHover, columnType }) => {
   );
 };
 
-export default DropWrapper;
+export default Column;
