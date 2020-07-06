@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 
 import { ItemType, ColumnType } from "../types/Types.js";
 
-const Item = ({ item, index, moveItem, columnType }) => {
+const Item = ({ item, index, moveItem, columnType, onBegin }) => {
   const ref = useRef(null);
 
   const [, drop] = useDrop({
@@ -20,19 +20,23 @@ const Item = ({ item, index, moveItem, columnType }) => {
       }
 
       const hoveredRect = ref.current.getBoundingClientRect();
-      const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
+      let hoverMiddle = (hoveredRect.bottom - hoveredRect.top) / 2;
       const mousePosition = monitor.getClientOffset();
-      const hoverClientY = mousePosition.y - hoveredRect.top;
+      let hoverClient = mousePosition.y - hoveredRect.top;
+      if (columnType === ColumnType.number) {
+        hoverMiddle = (hoveredRect.right - hoveredRect.left) / 2;
+        hoverClient = mousePosition.x - hoveredRect.left;
+      }
 
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      if (dragIndex < hoverIndex && hoverClient < hoverMiddle) {
         return;
       }
 
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      if (dragIndex > hoverIndex && hoverClient > hoverMiddle) {
         return;
       }
 
-      moveItem(dragIndex, hoverIndex, item.id, true);
+      moveItem(dragIndex, hoverIndex, item.id, true, columnType);
       item.index = hoverIndex;
     },
   });
@@ -42,11 +46,14 @@ const Item = ({ item, index, moveItem, columnType }) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    begin: () => {
+      onBegin(columnType);
+    },
     end: (dropResult, monitor) => {
       const { id: droppedId, originalIndex } = monitor.getItem();
       const didDrop = monitor.didDrop();
       if (!didDrop) {
-        moveItem(droppedId, originalIndex, item.id, false);
+        moveItem(droppedId, originalIndex, item.id, false, columnType);
       }
     },
   });
@@ -87,7 +94,9 @@ const Item = ({ item, index, moveItem, columnType }) => {
           style={{
             border: "0.5px solid purple",
             margin: `8px 4px`,
-            height: 36,
+            height: 50,
+            width: 50,
+            borderRadius: 25,
             opacity: isDragging ? 0 : 1,
           }}
         >

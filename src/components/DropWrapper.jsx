@@ -1,16 +1,13 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 
-import { ItemType } from "../types/Types.js";
+import { ItemType, ColumnType } from "../types/Types.js";
 
-const DropWrapper = ({ onDrop, children, onHover }) => {
+const DropWrapper = ({ children, onHover, columnType }) => {
   const [{ isOver }, drop] = useDrop({
     accept: ItemType,
-    drop: (item, monitor) => {
-      onDrop(item, monitor);
-    },
     hover: (item, monitor) => {
-      onHover(item, monitor);
+      onHover(item);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -19,7 +16,35 @@ const DropWrapper = ({ onDrop, children, onHover }) => {
 
   return (
     <div ref={drop} style={{ padding: 8 }}>
-      {React.cloneElement(children, { isOver })}
+      {columnType !== ColumnType.number ? (
+        <div
+          style={{
+            minHeight: 48,
+            width: 220,
+            margin: 8,
+            padding: 8,
+            border: "0.5px solid black",
+            backGround: isOver ? "lightGrey" : "white",
+          }}
+        >
+          {children}
+        </div>
+      ) : (
+        <div
+          style={{
+            minHeight: 48,
+            display: "flex",
+            justifyContent: "center",
+            width: 220,
+            margin: 8,
+            padding: 8,
+            border: "0.5px solid black",
+            backGround: isOver ? "lightGrey" : "white",
+          }}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 };
